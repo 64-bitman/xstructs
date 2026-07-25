@@ -70,8 +70,10 @@
                 arr->size == 0                                                 \
                     ? _XARRAY_MAX((size_t)initial, n)                          \
                     : (excess ? _XARRAY_MAX(n, arr->size * grow_factor) : n);  \
-        else if (shrink && arr->size > (size_t)(initial) &&                    \
-                 arr->len <= arr->size / 4)                                    \
+        else if (                                                              \
+            shrink && arr->size > (size_t)(initial) &&                         \
+            arr->len <= arr->size / 4                                          \
+        )                                                                      \
             new_sz = _XARRAY_MAX((size_t)initial, arr->size / 2);              \
         else if (shrink && n != new_sz)                                        \
             new_sz = (size_t)initial;                                          \
@@ -155,6 +157,15 @@
         );                                                                     \
         arr->len--;                                                            \
         (void)xarray_alloc_##name(arr, (size_t)arr->size, false, true);        \
+    }                                                                          \
+    _XARRAY_UNUSED static inline type *xarray_steal_##name(                    \
+        struct xarray_##name *arr, len_type *len                               \
+    )                                                                          \
+    {                                                                          \
+        type *ptr = arr->data;                                                 \
+        *len = arr->len;                                                       \
+        xarray_init_##name(arr);                                               \
+        return ptr;                                                            \
     }
 
 /*
