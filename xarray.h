@@ -104,7 +104,7 @@
         return true;                                                           \
     }                                                                          \
     _XARRAY_UNUSED static inline bool xarray_concat_##name(                    \
-        struct xarray_##name *arr, type *vals, size_t n_vals                   \
+        struct xarray_##name *arr, const type *vals, size_t n_vals             \
     )                                                                          \
     {                                                                          \
         if (!xarray_alloc_##name(arr, (size_t)arr->len + n_vals, true, false)) \
