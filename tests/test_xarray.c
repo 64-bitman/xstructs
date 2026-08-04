@@ -1,5 +1,9 @@
 /* SPDX-License-Identifier: Unlicense */
 
+#ifdef NDEBUG
+#    undef NDEBUG
+#endif
+
 #include "xarray.h"
 #include <stdio.h>
 

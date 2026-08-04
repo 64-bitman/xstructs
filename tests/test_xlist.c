@@ -1,5 +1,9 @@
 /* SPDX-License-Identifier: Unlicense */
 
+#ifdef NDEBUG
+#    undef NDEBUG
+#endif
+
 #include "xlist.h"
 #include <assert.h>
 #include <stdint.h>
