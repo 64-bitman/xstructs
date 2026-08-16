@@ -168,37 +168,5 @@
         return ptr;                                                            \
     }
 
-/*
- * Uses pointer to element
- */
-#define xarray_foreach(name, arr, ptrv)                                        \
-    _xarray_foreach(                                                           \
-        name,                                                                  \
-        arr,                                                                   \
-        ptrv,                                                                  \
-        _xarray_concat(xarray_i_, __COUNTER__),                                \
-        _xarray_concat(xarray_once_, __COUNTER__),                             \
-        ptr                                                                    \
-    )
-
-/*
- * Directly gets the element
- */
-#define xarray_foreach_val(name, arr, value)                                   \
-    _xarray_foreach(                                                           \
-        name,                                                                  \
-        arr,                                                                   \
-        value,                                                                 \
-        _xarray_concat(xarray_i_, __COUNTER__),                                \
-        _xarray_concat(xarray_once_, __COUNTER__),                             \
-        val                                                                    \
-    )
-
-#define _xarray_concat_(a, b) a##b
-#define _xarray_concat(a, b) _xarray_concat_(a, b)
-#define _xarray_foreach(name, arr, ptr, idx, once, type)                       \
-    for (__typeof__((arr)->len) idx = 0;                                       \
-         idx < (__typeof__((arr)->len))xarray_len_##name(arr);                 \
-         idx++)                                                                \
-        for (int once = ((ptr = xarray_##type##_##name((arr), idx)), 1); once; \
-             once = 0)
+#define xarray_foreach(arr, i_var)                                             \
+    for (__typeof__((arr)->len) i_var = 0; i_var < (arr)->len; i_var++)

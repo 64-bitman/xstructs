@@ -209,32 +209,15 @@ test_foreach(void)
     for (int i = 0; i < 5; i++)
         assert(xarray_add_int(&arr, i * 2));
 
-    int  sum = 0;
-    int  count = 0;
-    int *v;
-    xarray_foreach(int, &arr, v)
+    int sum = 0;
+    int count = 0;
+    xarray_foreach(&arr, i)
     {
-        sum += *v;
+        sum += xarray_val_int(&arr, i);
         count++;
     }
     assert(count == 5);
     assert(sum == (0 + 2 + 4 + 6 + 8));
-
-    xarray_uninit_int(&arr);
-}
-
-static void
-test_foreach_val(void)
-{
-    struct xarray_int arr;
-    xarray_init_int(&arr);
-    for (int i = 1; i <= 4; i++)
-        assert(xarray_add_int(&arr, i));
-
-    int sum = 0;
-    int val;
-    xarray_foreach_val(int, &arr, val) { sum += val; }
-    assert(sum == 10);
 
     xarray_uninit_int(&arr);
 }
@@ -247,8 +230,7 @@ test_foreach_mutation(void)
     for (int i = 0; i < 5; i++)
         assert(xarray_add_int(&arr, i));
 
-    int *v;
-    xarray_foreach(int, &arr, v) { *v *= 10; }
+    xarray_foreach(&arr, i) { *xarray_ptr_int(&arr, i) *= 10; }
 
     int expected[] = {0, 10, 20, 30, 40};
     for (int i = 0; i < 5; i++)
@@ -287,13 +269,8 @@ test_empty_array_foreach(void)
     struct xarray_int arr;
     xarray_init_int(&arr);
 
-    int  count = 0;
-    int *v;
-    xarray_foreach(int, &arr, v)
-    {
-        count++;
-        (void)v;
-    }
+    int count = 0;
+    xarray_foreach(&arr, i) { count++; }
     assert(count == 0);
 
     xarray_uninit_int(&arr);
@@ -311,7 +288,6 @@ main(void)
     test_clear();
     test_del();
     test_foreach();
-    test_foreach_val();
     test_foreach_mutation();
     test_struct_type();
     test_empty_array_foreach();
